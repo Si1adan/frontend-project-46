@@ -1,6 +1,6 @@
 {
   "name": "@hexlet/code",
-  "type":"module",
+  "type": "module",
   "version": "1.0.0",
   "description": "Compares two configuration files and shows a difference.",
   "main": "index.js",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Si1adan/frontend-project-46#readme",
   "dependencies": {
-    "commander": "^10.0.1"
+    "commander": "^10.0.1",
+    "lodash": "^4.17.21"
   }
 }
