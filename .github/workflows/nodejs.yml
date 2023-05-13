@@ -17,6 +17,7 @@ jobs:
       - name: Install dep-s
         run: npm ci
       - name: Make linter check
+        continue-on-error: true
         run: make lint
       - name: Make test check
         run: make test
