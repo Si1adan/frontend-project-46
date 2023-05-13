@@ -16,8 +16,8 @@ jobs:
           cache: 'npm'
       - name: Install dep-s
         run: npm ci
-      - name: Make linter check
-        continue-on-error: true
-        run: make lint
       - name: Make test check
         run: make test
+      - name: Make linter check
+        run: make lint
+      
