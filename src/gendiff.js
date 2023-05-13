@@ -1,11 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import _ from 'lodash';
 
-const cl = (...args) => console.log(...args);
-
 const gendiff = (p1, p2) => {
-  
   const path1 = resolve(`${p1}`);
   const path2 = resolve(`${p2}`);
 
@@ -36,7 +33,7 @@ const gendiff = (p1, p2) => {
         res += `  - ${key}: ${f1[key]}\n`;
       } else {
         res += `  + ${key}: ${f2[key]}\n`;
-      };
+      }
     }
   });
   const trueRes = `{\n${res}}`;
