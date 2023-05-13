@@ -24,17 +24,16 @@ const gendiff = (p1, p2) => {
 
   let res = '';
   sortedUKeys.map((key) => {
-    {
-      if (_.has(f1, key) && _.has(f2, key) && f1[key] === f2[key]) {
-        res += `    ${key}: ${f1[key]}\n`;
-      } else if (_.has(f1, key) && _.has(f2, key)) {
-        res += `  - ${key}: ${f1[key]}\n  + ${key}: ${f2[key]}\n`;
-      } else if (_.has(f1, key)) {
-        res += `  - ${key}: ${f1[key]}\n`;
-      } else {
-        res += `  + ${key}: ${f2[key]}\n`;
-      }
+    if (_.has(f1, key) && _.has(f2, key) && f1[key] === f2[key]) {
+      res += `    ${key}: ${f1[key]}\n`;
+    } else if (_.has(f1, key) && _.has(f2, key)) {
+      res += `  - ${key}: ${f1[key]}\n  + ${key}: ${f2[key]}\n`;
+    } else if (_.has(f1, key)) {
+      res += `  - ${key}: ${f1[key]}\n`;
+    } else {
+      res += `  + ${key}: ${f2[key]}\n`;
     }
+    return res;
   });
   const trueRes = `{\n${res}}`;
 
