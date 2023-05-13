@@ -1,0 +1,22 @@
+name: node-ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps: 
+      - name: Get repo code
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install dep-s
+        run: npm ci
+      - name: Make linter check
+        run: make lint
+      - name: Make test check
+        run: make test
