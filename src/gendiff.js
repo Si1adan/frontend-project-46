@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import _ from 'lodash';
+import parse from './parsers.js';
 
 const gendiff = (p1, p2) => {
   const path1 = resolve(`${p1}`);
@@ -9,8 +10,8 @@ const gendiff = (p1, p2) => {
   const file1 = readFileSync(path1);
   const file2 = readFileSync(path2);
 
-  const pF1 = JSON.parse(file1);
-  const pF2 = JSON.parse(file2);
+  const pF1 = parse(path1, file1);
+  const pF2 = parse(path2, file2);
 
   const f1 = pF1;
   const f2 = pF2;
