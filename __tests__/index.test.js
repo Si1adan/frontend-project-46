@@ -16,6 +16,7 @@ test('genTree js case', () => {
 
   expect(genTree(path1, path2)).toBe(expected);
 });
+
 test('genTree yml case', () => {
   const path1 = getFixturePath('file1.yml');
   const path2 = getFixturePath('file2.yml');
@@ -23,10 +24,28 @@ test('genTree yml case', () => {
 
   expect(genTree(path1, path2)).toBe(expected);
 });
+
 test('genTree to JSON case', () => {
   const path1 = getFixturePath('file1.yml');
   const path2 = getFixturePath('file2.yml');
   const expected = readFile('expected_file_JSON.yml');
 
   expect(genTree(path1, path2, 'json')).toBe(expected);
+});
+
+test('genTree plain format case', () => {
+  const path1 = getFixturePath('file1.yml');
+  const path2 = getFixturePath('file2.yml');
+  const expected = readFile('expected_file_plain.yml');
+
+  expect(genTree(path1, path2, 'plain')).toBe(expected);
+});
+
+test('genTree other format case', () => {
+  const path1 = getFixturePath('file1.yml');
+  const path2 = getFixturePath('file2.yml');
+  const type = 'txt';
+  const expected = `format ${type} is not supported`;
+
+  expect(() => genTree(path1, path2, type)).toThrow(Error, expected);
 });
