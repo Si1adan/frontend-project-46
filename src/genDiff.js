@@ -1,5 +1,16 @@
 import _ from 'lodash';
-import getSortedUniqKeys from './getKeys.js';
+
+const getSortedUniqKeys = (o1, o2) => {
+  const [o1Keys, o2Keys] = [Object.keys(o1), Object.keys(o2)];
+
+  const sumOfKeys = _.concat(o1Keys, o2Keys);
+
+  const uniqKeys = _.uniq(sumOfKeys);
+
+  const sortedUniqKeys = _.sortBy(uniqKeys);
+
+  return sortedUniqKeys;
+};
 
 const isCom = (obj1, obj2, prop) => _.has(obj1, prop) && _.has(obj2, prop);
 

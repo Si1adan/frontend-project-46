@@ -12,3 +12,4 @@ overrides:
     globals:
       test: "readonly"
       expect: "readonly"
+      describe: "readonly"

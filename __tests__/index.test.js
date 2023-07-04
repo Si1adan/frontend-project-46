@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
-import genTree from '../src/genTree.js';
+import genTree from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,43 +9,49 @@ const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => readFileSync(getFixturePath(filename), 'utf-8');
 
-test('genTree js case', () => {
-  const path1 = getFixturePath('file1.json');
-  const path2 = getFixturePath('file2.json');
-  const expected = readFile('expected_file_stylish.yml');
+const [pathJSON1, pathJSON2, pathYML1, pathYML2] = [
+  'file1.json', 'file2.json', 'file1.yml', 'file2.yml',
+]
+  .map((name) => getFixturePath(name));
 
-  expect(genTree(path1, path2)).toBe(expected);
-});
+const [expectedJSON, expectedPlain, expectedStylish] = [
+  'expected_file_JSON.yml', 'expected_file_plain.yml', 'expected_file_stylish.yml',
+]
+  .map((name) => readFile(name));
 
-test('genTree yml case', () => {
-  const path1 = getFixturePath('file1.yml');
-  const path2 = getFixturePath('file2.yml');
-  const expected = readFile('expected_file_stylish.yml');
+const testData1 = [
+  {
+    path1: pathJSON1, path2: pathJSON2, expected: expectedStylish, type: 'JS',
+  },
+  {
+    path1: pathYML1, path2: pathYML2, expected: expectedStylish, type: 'YML',
+  },
+];
 
-  expect(genTree(path1, path2)).toBe(expected);
-});
+const testData2 = [
+  {
+    path1: pathYML1, path2: pathYML2, expected: expectedPlain, type: 'plain',
+  },
+  {
+    path1: pathJSON1, path2: pathJSON2, expected: expectedJSON, type: 'json',
+  },
+];
 
-test('genTree to JSON case', () => {
-  const path1 = getFixturePath('file1.yml');
-  const path2 = getFixturePath('file2.yml');
-  const expected = readFile('expected_file_JSON.yml');
+const testData3 = {
+  path1: pathJSON1, path2: pathJSON2, expected: 'format txt is not supported', type: 'txt',
+};
 
-  expect(genTree(path1, path2, 'json')).toBe(expected);
-});
+describe('genTree tests', () => {
+  test.each(testData1)('$type case', ({ path1, path2, expected }) => expect(genTree(path1, path2)).toBe(expected));
 
-test('genTree plain format case', () => {
-  const path1 = getFixturePath('file1.yml');
-  const path2 = getFixturePath('file2.yml');
-  const expected = readFile('expected_file_plain.yml');
+  test.each(testData2)('$type case', ({
+    path1, path2, expected, type,
+  }) => expect(genTree(path1, path2, type)).toBe(expected));
 
-  expect(genTree(path1, path2, 'plain')).toBe(expected);
-});
-
-test('genTree other format case', () => {
-  const path1 = getFixturePath('file1.yml');
-  const path2 = getFixturePath('file2.yml');
-  const type = 'txt';
-  const expected = `format ${type} is not supported`;
-
-  expect(() => genTree(path1, path2, type)).toThrow(Error, expected);
+  test.failing('txt case', () => {
+    const {
+      path1, path2, expected, type,
+    } = testData3;
+    expect(genTree(path1, path2, type)).toThrow(Error, expected);
+  });
 });

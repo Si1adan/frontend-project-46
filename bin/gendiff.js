@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import genTree from '../src/genTree.js';
+import genTree from '../src/index.js';
 
 const program = new Command();
 
