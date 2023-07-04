@@ -8,9 +8,7 @@ const stringify = (value, depth, indPerLevel = 4, replacer = ' ') => {
     }
 
     const indentSize = innerDepth * indPerLevel;
-
     const currentIndent = replacer.repeat(indentSize);
-
     const bracketIndent = replacer.repeat(indentSize - indPerLevel);
 
     const lines = Object
