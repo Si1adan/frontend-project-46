@@ -33,8 +33,7 @@ const [replacer, comInd, O1Ind, O2Ind] = [' ', '  ', '- ', '+ '];
 const iter = (curVal, depth) => {
   const baseInd = depth * indPerLevel;
 
-  const [bracketInd, curInd] = [
-    replacer.repeat(baseInd - indPerLevel),
+  const [bracketInd, curInd] = [replacer.repeat(baseInd - indPerLevel),
     replacer.repeat(baseInd - offsetLeft),
   ];
 
