@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, extname } from 'path';
 import parse from './parsers.js';
 import genDiff from './genDiff.js';
 import format from './formatters/index.js';
@@ -9,7 +9,9 @@ const pathResolveToObj = (p) => {
 
   const file = readFileSync(path);
 
-  const parsedFile = parse(path, file);
+  const extension = extname(path).slice(1);
+
+  const parsedFile = parse(extension, file);
 
   return parsedFile;
 };

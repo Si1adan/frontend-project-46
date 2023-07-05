@@ -1,8 +1,7 @@
-import { extname } from 'path';
 import { load } from 'js-yaml';
 
-const parse = (path, buffer) => (
-  extname(path) === '.yml' || extname(path) === '.yaml'
+const parse = (extension, buffer) => (
+  extension === 'yml' || extension === 'yaml'
     ? load(buffer)
     : JSON.parse(buffer));
 
