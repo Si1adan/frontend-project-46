@@ -1,4 +1,3 @@
-/* eslint-disable prefer-template */
 import _ from 'lodash';
 
 const stringify = (value, depth, indPerLevel = 4, replacer = ' ') => {
@@ -8,7 +7,9 @@ const stringify = (value, depth, indPerLevel = 4, replacer = ' ') => {
     }
 
     const indentSize = innerDepth * indPerLevel;
+
     const currentIndent = replacer.repeat(indentSize);
+
     const bracketIndent = replacer.repeat(indentSize - indPerLevel);
 
     const lines = Object
@@ -29,17 +30,6 @@ const [indPerLevel, offsetLeft] = [4, 2];
 
 const [replacer, comInd, O1Ind, O2Ind] = [' ', '  ', '- ', '+ '];
 
-const statusInd = (status) => {
-  switch (status) {
-    case 'removed':
-      return O1Ind;
-    case 'added':
-      return O2Ind;
-    default:
-      return comInd;
-  }
-};
-
 const iter = (curVal, depth) => {
   const baseInd = depth * indPerLevel;
 
@@ -47,32 +37,35 @@ const iter = (curVal, depth) => {
 
   const [bracketInd, curInd] = [replacer.repeat(bracketIndSize), replacer.repeat(indSize)];
 
+  const normVal = (val) => stringify(val, depth + 1);
+
   const lines = curVal.map((prop) => {
     const { name } = prop;
-
-    const genLine = (status, val) => `${curInd}${statusInd(status)}${name}: ${val}`;
 
     const {
       value, status, value1, value2,
     } = prop;
 
-    switch (prop.status) {
+    switch (status) {
       case 'updated':
 
-        return genLine('removed', stringify(value1, depth + 1)) + '\n'
-        + genLine('added', stringify(value2, depth + 1));
+        return `${curInd}${O1Ind}${name}: ${normVal(value1)}\n${curInd}${O2Ind}${name}: ${normVal(value2)}`;
 
       case 'nested':
 
-        return genLine(status, iter(value, depth + 1));
+        return `${curInd}${comInd}${name}: ${iter(value, depth + 1)}`;
+
+      case 'removed':
+
+        return `${curInd}${O1Ind}${name}: ${normVal(value)}`;
+
+      case 'added':
+
+        return `${curInd}${O2Ind}${name}: ${normVal(value)}`;
 
       default:
 
-        if (_.isObject(value)) {
-          return genLine(status, stringify(value, depth + 1));
-        }
-
-        return genLine(status, value);
+        return `${curInd}${comInd}${name}: ${normVal(value)}`;
     }
   });
 
