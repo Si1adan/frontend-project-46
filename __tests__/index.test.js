@@ -36,9 +36,13 @@ const testData2 = {
 describe('genTree tests', () => {
   test.each(testData1)('$type case', ({
     path1, path2, expected, type,
-  }) => (type === 'JS' || type === 'YML'
-    ? expect(genTree(path1, path2)).toBe(expected)
-    : expect(genTree(path1, path2, type)).toBe(expected)));
+  }) => {
+    const result = (type === 'JS' || type === 'YML')
+      ? genTree(path1, path2)
+      : genTree(path1, path2, type);
+
+    expect(result).toBe(expected);
+  });
 
   test.failing('txt case', () => {
     const {
