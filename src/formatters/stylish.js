@@ -48,23 +48,18 @@ const iter = (curVal, depth) => {
 
     switch (status) {
       case 'updated':
-
         return `${curInd}${O1Ind}${name}: ${normVal(value1)}\n${curInd}${O2Ind}${name}: ${normVal(value2)}`;
 
       case 'nested':
-
         return `${curInd}${comInd}${name}: ${iter(value, depth + 1)}`;
 
       case 'removed':
-
         return `${curInd}${O1Ind}${name}: ${normVal(value)}`;
 
       case 'added':
-
         return `${curInd}${O2Ind}${name}: ${normVal(value)}`;
 
       default:
-
         return `${curInd}${comInd}${name}: ${normVal(value)}`;
     }
   });

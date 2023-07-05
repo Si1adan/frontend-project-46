@@ -10,27 +10,26 @@ const iter = (o1, o2) => {
   const keys = getSortedUniqKeys(o1, o2);
 
   const lines = keys.map((key) => {
-    const [val1, val2] = [o1[key], o2[key]];
+    const [val1, val2] = [_.get(o1, key), _.get(o2, key)];
 
-    if (_.has(o1, key) && !_.has(o2, key)) {
-      return { name: key, value: val1, status: 'removed' };
+    switch (true) {
+      case !_.has(o2, key):
+        return { name: key, value: val1, status: 'removed' };
+
+      case !_.has(o1, key):
+        return { name: key, value: val2, status: 'added' };
+
+      case val1 === val2:
+        return { name: key, value: val1 };
+
+      case _.isObject(val1) && _.isObject(val2):
+        return { name: key, value: iter(val1, val2), status: 'nested' };
+
+      default:
+        return {
+          name: key, value1: val1, value2: val2, status: 'updated',
+        };
     }
-
-    if (!_.has(o1, key) && _.has(o2, key)) {
-      return { name: key, value: val2, status: 'added' };
-    }
-
-    if (val1 === val2) {
-      return { name: key, value: val1 };
-    }
-
-    if (_.isObject(val1) && _.isObject(val2)) {
-      return { name: key, value: iter(val1, val2), status: 'nested' };
-    }
-
-    return {
-      name: key, value1: val1, value2: val2, status: 'updated',
-    };
   });
 
   return lines;
