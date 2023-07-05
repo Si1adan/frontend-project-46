@@ -33,40 +33,35 @@ const [replacer, comInd, O1Ind, O2Ind] = [' ', '  ', '- ', '+ '];
 const iter = (curVal, depth) => {
   const baseInd = depth * indPerLevel;
 
-  const [bracketIndSize, indSize] = [baseInd - indPerLevel, baseInd - offsetLeft];
-
-  const [bracketInd, curInd] = [replacer.repeat(bracketIndSize), replacer.repeat(indSize)];
-
-  const normVal = (val) => stringify(val, depth + 1);
-
-  const lines = curVal.map((prop) => {
-    const { name } = prop;
-
-    const {
-      value, status, value1, value2,
-    } = prop;
-
-    switch (status) {
-      case 'updated':
-        return `${curInd}${O1Ind}${name}: ${normVal(value1)}\n${curInd}${O2Ind}${name}: ${normVal(value2)}`;
-
-      case 'nested':
-        return `${curInd}${comInd}${name}: ${iter(value, depth + 1)}`;
-
-      case 'removed':
-        return `${curInd}${O1Ind}${name}: ${normVal(value)}`;
-
-      case 'added':
-        return `${curInd}${O2Ind}${name}: ${normVal(value)}`;
-
-      default:
-        return `${curInd}${comInd}${name}: ${normVal(value)}`;
-    }
-  });
+  const [bracketInd, curInd] = [
+    replacer.repeat(baseInd - indPerLevel),
+    replacer.repeat(baseInd - offsetLeft),
+  ];
 
   return [
     '{',
-    ...lines,
+    ...curVal.map((prop) => {
+      const {
+        name, value, status, value1, value2,
+      } = prop;
+
+      switch (status) {
+        case 'updated':
+          return `${curInd}${O1Ind}${name}: ${stringify(value1, depth + 1)}\n${curInd}${O2Ind}${name}: ${stringify(value2, depth + 1)}`;
+
+        case 'nested':
+          return `${curInd}${comInd}${name}: ${iter(value, depth + 1)}`;
+
+        case 'removed':
+          return `${curInd}${O1Ind}${name}: ${stringify(value, depth + 1)}`;
+
+        case 'added':
+          return `${curInd}${O2Ind}${name}: ${stringify(value, depth + 1)}`;
+
+        default:
+          return `${curInd}${comInd}${name}: ${stringify(value, depth + 1)}`;
+      }
+    }),
     `${bracketInd}}`,
   ].join('\n');
 };
