@@ -32,11 +32,8 @@ const iter = (acc, curVal) => curVal
       case 'added':
         return `Property '${resName}' was added with value: ${normaliser(value)}`;
 
-      case 'removed':
-        return `Property '${resName}' was removed`;
-
       default:
-        return '';
+        return `Property '${resName}' was removed`;
     }
   })
   .join('\n');
