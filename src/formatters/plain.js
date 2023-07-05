@@ -12,50 +12,34 @@ const normaliser = (val) => {
   return val;
 };
 
-const getStatus = (stat, val1, val2) => {
-  switch (stat) {
-    case 'added':
-      return `added with value: ${val1}`;
-    case 'removed':
-      return 'removed';
-    default:
-      return `updated. From ${val1} to ${val2}`;
-  }
-};
+const iter = (acc, curVal) => curVal
+  .filter(({ status }) => !_.isUndefined(status))
+  .map((prop) => {
+    const {
+      name, status, value, value1, value2,
+    } = prop;
 
-const genLine = (curProp, stat, val1, val2) => {
-  const [normVal1, normVal2] = [normaliser(val1), normaliser(val2)];
+    const resName = `${acc}${name}`;
+    const nestedName = `${resName}.`;
 
-  return `Property '${curProp}' was ${getStatus(stat, normVal1, normVal2)}`;
-};
+    switch (status) {
+      case 'updated':
+        return `Property '${resName}' was updated. From ${normaliser(value1)} to ${normaliser(value2)}`;
 
-const iter = (acc, curVal) => {
-  const lines = curVal
-    .filter(({ status }) => !_.isUndefined(status))
-    .map((prop) => {
-      const { name, status } = prop;
-
-      const resName = `${acc}${name}`;
-
-      if (status === 'updated') {
-        const { value1, value2 } = prop;
-
-        return genLine(resName, 'updated', value1, value2);
-      }
-
-      const { value } = prop;
-
-      if (status === 'nested') {
-        const nestedName = `${resName}.`;
-
+      case 'nested':
         return iter(nestedName, value);
-      }
 
-      return genLine(resName, status, value);
-    });
+      case 'added':
+        return `Property '${resName}' was added with value: ${normaliser(value)}`;
 
-  return lines.join('\n');
-};
+      case 'removed':
+        return `Property '${resName}' was removed`;
+
+      default:
+        return '';
+    }
+  })
+  .join('\n');
 
 const plain = (diff) => iter('', diff);
 
