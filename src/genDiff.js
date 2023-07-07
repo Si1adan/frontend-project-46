@@ -10,7 +10,8 @@ const iter = (o1, o2) => {
   const keys = getSortedUniqKeys(o1, o2);
 
   const lines = keys.map((key) => {
-    const [val1, val2] = [_.get(o1, key), _.get(o2, key)];
+    const val1 = _.get(o1, key);
+    const val2 = _.get(o2, key);
 
     switch (true) {
       case !_.has(o2, key):

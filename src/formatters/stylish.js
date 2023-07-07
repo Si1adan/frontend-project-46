@@ -26,9 +26,13 @@ const stringify = (value, depth, indPerLevel = 4, replacer = ' ') => {
   return iter(value, depth);
 };
 
-const [indPerLevel, offsetLeft] = [4, 2];
+const indPerLevel = 4;
+const offsetLeft = 2;
 
-const [replacer, comInd, O1Ind, O2Ind] = [' ', '  ', '- ', '+ '];
+const replacer = ' ';
+const comInd = '  ';
+const O1Ind = '- ';
+const O2Ind = '+ ';
 
 const iter = (curVal, depth) => {
   const baseInd = depth * indPerLevel;
