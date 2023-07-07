@@ -22,10 +22,10 @@ const testData1 = [
     path1: pathYML1, path2: pathYML2, expected: readFile('expected_file_stylish.yml'), type: 'YML',
   },
   {
-    path1: pathYML1, path2: pathYML2, expected: readFile('expected_file_plain.yml'), type: 'plain',
+    path1: pathYML1, path2: pathYML2, expected: readFile('expected_file_plain.yml'), type: 'Plain', format: 'plain',
   },
   {
-    path1: pathJSON1, path2: pathJSON2, expected: readFile('expected_file_JSON.yml'), type: 'json',
+    path1: pathJSON1, path2: pathJSON2, expected: readFile('expected_file_JSON.yml'), type: 'JSON', format: 'json',
   },
 ];
 
@@ -35,13 +35,9 @@ const testData2 = {
 
 describe('genTree tests', () => {
   test.each(testData1)('$type case', ({
-    path1, path2, expected, type,
+    path1, path2, expected, format,
   }) => {
-    const result = (type === 'JS' || type === 'YML')
-      ? genTree(path1, path2)
-      : genTree(path1, path2, type);
-
-    expect(result).toBe(expected);
+    expect(genTree(path1, path2, format)).toBe(expected);
   });
 
   test.failing('txt case', () => {
